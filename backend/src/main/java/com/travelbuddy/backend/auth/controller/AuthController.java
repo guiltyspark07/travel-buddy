@@ -1,8 +1,10 @@
 package com.travelbuddy.backend.auth.controller;
 
 import com.travelbuddy.backend.auth.dto.RegisterRequest;
+import com.travelbuddy.backend.auth.dto.RegisterResponse;
 import com.travelbuddy.backend.auth.entity.User;
 import com.travelbuddy.backend.auth.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,7 @@ public class AuthController {
     }
 
     @RequestMapping("/register")
-    public User register(@RequestBody RegisterRequest request){
+    public RegisterResponse register(@Valid @RequestBody RegisterRequest request){
         return authService.register(request.getEmail(), request.getPassword());
     }
 
