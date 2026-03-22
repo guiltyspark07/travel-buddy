@@ -1,7 +1,10 @@
 package com.travelbuddy.backend.auth.service;
 
+import com.travelbuddy.backend.auth.dto.LoginResponse;
 import com.travelbuddy.backend.auth.dto.RegisterResponse;
 import com.travelbuddy.backend.auth.entity.User;
+import com.travelbuddy.backend.auth.exception.EmailAlreadyExistsException;
+import com.travelbuddy.backend.auth.exception.InvalidCredentialsException;
 import com.travelbuddy.backend.auth.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,7 @@ public class AuthService {
     public RegisterResponse register(String email, String password){
 
         if(userRepository.existsByEmail(email)){
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         User user = new User();
@@ -39,7 +42,26 @@ public class AuthService {
 
         return response;
 
-
-
     }
+
+    public LoginResponse login(String email, String password){
+
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
+
+        boolean isMatch = PasswordHasher.matches(password, user.getPasswordHash());
+
+        if(!isMatch){
+            throw new InvalidCredentialsException("Invalid credentials");
+        }
+
+        LoginResponse response = new LoginResponse();
+        response.setId(user.getId());
+        response.setEmail(user.getEmail());
+        response.setStatus(user.getStatus());
+        response.setMessage("Login Successfully");
+
+        return response;
+    }
+
 }
