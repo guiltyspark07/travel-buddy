@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+import com.travelbuddy.backend.auth.util.PasswordHasher;
 @Service
 public class AuthService {
 
@@ -25,7 +25,7 @@ public class AuthService {
         User user = new User();
         user.setId(UUID.randomUUID());
         user.setEmail(email);
-        user.setPasswordHash(passwordHash);
+        user.setPasswordHash(PasswordHasher.hash(passwordHash));
         user.setStatus("ACTIVE");
         user.setCreatedAt(LocalDateTime.now());
 
