@@ -9,6 +9,7 @@ export default function RegisterPage() {
 
   const handleRegister = async () => {
     try {
+      console.log("Clicked");
       const response = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: {
